@@ -1,0 +1,111 @@
+/* General */
+:root {
+  scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+  font-family: var(--font-primary);
+  color: var(--color-text);
+}
+
+body {
+  /* min-height: 75rem; */
+  padding-top: 5rem;
+}
+
+/* LOGIN */
+.form-signin {
+  margin-top: 8rem;
+}
+.form-signin .row {
+  width: 30%;
+}
+.form-signin .card {
+  padding: 15px;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.form-signin img {
+  width: 65%;
+  top: -40px;
+}
+.form-signin h1 {
+  font-family: "Cooper Black", sans-serif;
+}
+.form-signin p {
+  font-size: 10px;
+}
+
+/* NAVBAR */
+.navbar .navbar-nav .active {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-weight: 700;
+  border-radius: 10px;
+}
+.navbar .navbar-brand span {
+  font-size: 2rem;
+  font-family: "Cooper Black", sans-serif;
+  -webkit-text-stroke: 0.3px var(--color-bg);
+}
+.offcanvas .profile i {
+  font-size: 10rem;
+}
+.offcanvas .sign-out i {
+  font-size: 25px;
+}
+
+/* HOME */
+
+/* FEEDER */
+
+/* Data Feeder */
+.data-feeder {
+  width: 100%;
+}
+.data-feeder .nav-btn .btn:not(:first-child) {
+  width: min-content;
+  margin-left: 10px;
+}
+.data-feeder .beban-feeder {
+  font-size: 12px;
+}
+
+/* PEMELIHARAAN */
+.rencana-pemeliharaan {
+  width: 100%;
+}
+.rencana-pemeliharaan .nav-btn .btn:not(:first-child) {
+  width: min-content;
+  margin-left: 10px;
+}
+.rencana-pemeliharaan .beban-feeder {
+  font-size: 12px;
+}
+.rencana-pemeliharaan .blank-data img {
+  width: 55%;
+}
+.rencana-pemeliharaan .blank-data p {
+  color: var(--color-text);
+  font-size: 30px;
+  font-weight: 700;
+}
+.rencana-pemeliharaan .input-tanggal input {
+  padding: 10px;
+  font-size: 20px;
+}

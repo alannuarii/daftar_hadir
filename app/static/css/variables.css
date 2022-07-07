@@ -1,0 +1,15 @@
+:root {
+  /* Fonts */
+  --font-default: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-primary: "Source Sans Pro", sans-serif;
+  --font-secondary: "Poppins", sans-serif;
+
+  /* Colors */
+  --color-bg: #fff;
+  --color-text: #1a1f24;
+  --color-text2: #45505b;
+  --color-btn: #ee2110;
+  --color-btn-hover: #ee2210d5;
+  --color-btn2: #4a0e03;
+  --color-btn2-hover: #4a0e03d5;
+}
