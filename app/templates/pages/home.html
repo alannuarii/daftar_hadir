@@ -1,9 +1,37 @@
 {% extends 'layouts/base.html' %} {% block title %}
 <title>{{ title }}</title>
 {% endblock %} {% block content %}
-<main class="container home border">
-  <div class="row border">
-    <div class="col border"></div>
+<main class="container home">
+  <div class="row">
+    <div class="col-12">
+      <div class="card text-center rounded-4">
+        <h3 class="fw-bolder">AGENDA RAPAT HARI INI</h3>
+        <table class="table table-bordered text-center">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Hari/Tanggal</th>
+              <th scope="col">Lokasi</th>
+              <th scope="col">Agenda</th>
+              <th scope="col">Check-In</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for td in today %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{td.tanggal}}</td>
+              <td>{{td.tempat}}</td>
+              <td class="text-start">{{td.agenda}}</td>
+              <td>
+                <a href="{{ url_for('input_absen' ) }}"><i class="bi-arrow-right-circle"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </main>
 {% endblock %}

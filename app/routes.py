@@ -54,6 +54,9 @@ def index():
     # db.session.add(admin)
     # db.session.commit()
 
+    today = datetime.now().strftime('%Y-%m-%d')
+    rapat_today = Agenda.query.filter_by(tanggal=today).all()
+
     if request.method == 'POST':
         tanggal = request.form['tanggal']
         waktu = request.form['waktu']
@@ -62,6 +65,20 @@ def index():
         rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, agenda=agenda)
         db.session.add(rapat)
         db.session.commit()
-    return render_template('pages/home.html', title='Home | RedPanda', active_home='active')
+    return render_template('pages/home.html', title='Home | RedPanda', today=rapat_today)
+
+
+@app.route('/input-absen', methods=['GET','POST'])
+@login_required
+def input_absen():
+    if request.method == 'POST':
+        tanggal = request.form['tanggal']
+        waktu = request.form['waktu']
+        tempat = request.form['tempat']
+        agenda = request.form['agenda']
+        rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, agenda=agenda)
+        db.session.add(rapat)
+        db.session.commit()
+    return render_template('pages/input-absen.html', title='Home | RedPanda')
 
 

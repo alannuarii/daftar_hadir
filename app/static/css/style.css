@@ -74,3 +74,6 @@ body {
 }
 
 /* HOME */
+.home .card {
+  padding: 10px;
+}
