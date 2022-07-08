@@ -1,19 +1,19 @@
 <header class="fixed-top">
   <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container">
-      <a href="#" class="navbar-brand d-flex align-items-center">
+      <a href="/" class="navbar-brand d-flex align-items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
           <circle cx="12" cy="13" r="4" />
         </svg>
-        <strong>Album</strong>
+        <strong>DAFTAR HADIR ONLINE</strong>
       </a>
       {% if current_user.name %}
-      <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#login" aria-controls="offcanvasRight">
+      <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#needlogin" aria-controls="offcanvasRight">
         <span class="navbar-toggler-icon"></span>
       </button>
       {% else %}
-      <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#logout" aria-controls="offcanvasRight">
+      <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#notlogin" aria-controls="offcanvasRight">
         <span class="navbar-toggler-icon"></span>
       </button>
       {% endif %}
@@ -22,7 +22,7 @@
 </header>
 
 <!-- Navbar Offcanvas -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="login" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="needlogin" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
@@ -32,37 +32,29 @@
       <h3 class="fw-bolder">{{current_user.name}}</h3>
     </div>
     <div class="row sign-out">
+      <a href="{{ url_for('index' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-arrow-right-circle me-2"></i>Check-In</a>
       <button class="btn btn-primary d-flex align-items-center justify-content-center mb-2" data-bs-toggle="modal" data-bs-target="#modal-input"><i class="bi-journal-plus me-2"></i>Buat Daftar Hadir</button>
-      <button class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-journal-text me-2"></i>Daftar Hadir</button>
+      <a href="{{ url_for('daftar_hadir' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-journal-text me-2"></i>Daftar Hadir Rapat</a>
       <a href="{{ url_for('logout' ) }}" class="btn btn-secondary d-flex align-items-center justify-content-center"><i class="bi-box-arrow-right me-2"></i>Sign Out</a>
     </div>
   </div>
 </div>
 
 <!-- Navbar Offcanvas -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="logout" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="notlogin" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <form class="card text-center border rounded-4 shadow-lg" method="post" action="">
-      <h2 class="h3 mb-3 fw-normal">Please sign in</h2>
-      {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}{% if message != 'Please log in to access this page.' %}
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{message}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endif %} {% endfor %} {% endif %} {% endwith %}
-      <div class="form-floating">
-        <input type="email" class="form-control" id="floatingInput" name="tanggal" name="email" />
-        <label for="floatingInput">Email address</label>
-      </div>
-      <div class="form-floating mb-3">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" />
-        <label for="floatingPassword">Password</label>
-      </div>
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-    </form>
+    <div class="row profile text-center mb-5">
+      <i class="bi-person-circle text-secondary"></i>
+      <h3 class="fw-bolder">Public User</h3>
+    </div>
+    <div class="row sign-out">
+      <a href="{{ url_for('index' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-arrow-right-circle me-2"></i>Check-In</a>
+      <a href="{{ url_for('daftar_hadir' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-journal-text me-2"></i>Daftar Hadir Rapat</a>
+      <a href="{{ url_for('login' ) }}" class="btn btn-secondary d-flex align-items-center justify-content-center"><i class="bi-box-arrow-in-right me-2"></i>Sign In</a>
+    </div>
   </div>
 </div>
 
@@ -92,7 +84,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Kirim</button>
         </div>
       </form>
     </div>

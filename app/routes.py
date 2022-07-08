@@ -43,7 +43,6 @@ def logout():
 
 
 @app.route('/', methods=['GET','POST'])
-@login_required
 def index():
     # name = 'Alan Nuari'
     # email = 'email@alan.web.id'
@@ -68,9 +67,9 @@ def index():
     return render_template('pages/home.html', title='Home | RedPanda', today=rapat_today)
 
 
-@app.route('/input-absen', methods=['GET','POST'])
-@login_required
-def input_absen():
+@app.route('/input-absen/<id>', methods=['GET','POST'])
+def input_absen(id):
+    rapat = Agenda.query.filter_by(id=id).first()
     if request.method == 'POST':
         tanggal = request.form['tanggal']
         waktu = request.form['waktu']
@@ -79,6 +78,11 @@ def input_absen():
         rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, agenda=agenda)
         db.session.add(rapat)
         db.session.commit()
-    return render_template('pages/input-absen.html', title='Home | RedPanda')
+    return render_template('pages/input-absen.html', title='Home | RedPanda', rapat=rapat)
 
 
+@app.route('/daftar-hadir')
+def daftar_hadir():
+    rapat_all = Agenda.query.all()
+
+    return render_template('pages/daftar-hadir.html', title='Home | RedPanda', rapats=rapat_all)

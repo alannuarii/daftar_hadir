@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-12">
       <div class="card text-center rounded-4">
-        <h3 class="fw-bolder">AGENDA RAPAT HARI INI</h3>
+        <h3 class="fw-bolder">DAFTAR HADIR RAPAT</h3>
         <table class="table table-bordered text-center">
           <thead>
             <tr>
@@ -13,18 +13,18 @@
               <th scope="col">Hari/Tanggal</th>
               <th scope="col">Lokasi</th>
               <th scope="col">Agenda</th>
-              <th scope="col">Check-In</th>
+              <th scope="col">Peserta</th>
             </tr>
           </thead>
           <tbody>
-            {% for td in today %}
+            {% for rapat in rapats %}
             <tr>
               <td>{{loop.index}}</td>
-              <td>{{td.tanggal}}</td>
-              <td>{{td.tempat}}</td>
-              <td class="text-start">{{td.agenda}}</td>
+              <td>{{rapat.tanggal}}</td>
+              <td>{{rapat.tempat}}</td>
+              <td class="text-start">{{rapat.agenda}}</td>
               <td>
-                <a href="{{ url_for('input_absen', id=td.id ) }}"><i class="bi-arrow-right-circle"></i></a>
+                <a href="{{ url_for('input_absen', id=rapat.id ) }}"><i class="bi-people"></i></a>
               </td>
             </tr>
             {% endfor %}
