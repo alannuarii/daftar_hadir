@@ -6,6 +6,6 @@
     <link href="{{ url_for('static', filename='img/logo3.png' ) }}" rel="icon" />
   </head>
   <body>
-    {% block content %} {% endblock %} {% include 'includes/scripts.html' %}
+    {% include 'includes/navbar.html' %}{% block content %} {% endblock %} {% include 'includes/scripts.html' %}
   </body>
 </html>

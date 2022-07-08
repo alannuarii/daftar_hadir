@@ -52,60 +52,25 @@ body {
 }
 
 /* NAVBAR */
-.navbar .navbar-nav .active {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-weight: 700;
-  border-radius: 10px;
-}
-.navbar .navbar-brand span {
-  font-size: 2rem;
-  font-family: "Cooper Black", sans-serif;
-  -webkit-text-stroke: 0.3px var(--color-bg);
-}
 .offcanvas .profile i {
   font-size: 10rem;
+  margin-bottom: -1.5rem;
 }
 .offcanvas .sign-out i {
-  font-size: 25px;
+  font-size: 1.5rem;
+}
+.offcanvas .card {
+  padding: 15px;
+}
+.offcanvas input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.offcanvas input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 /* HOME */
-
-/* FEEDER */
-
-/* Data Feeder */
-.data-feeder {
-  width: 100%;
-}
-.data-feeder .nav-btn .btn:not(:first-child) {
-  width: min-content;
-  margin-left: 10px;
-}
-.data-feeder .beban-feeder {
-  font-size: 12px;
-}
-
-/* PEMELIHARAAN */
-.rencana-pemeliharaan {
-  width: 100%;
-}
-.rencana-pemeliharaan .nav-btn .btn:not(:first-child) {
-  width: min-content;
-  margin-left: 10px;
-}
-.rencana-pemeliharaan .beban-feeder {
-  font-size: 12px;
-}
-.rencana-pemeliharaan .blank-data img {
-  width: 55%;
-}
-.rencana-pemeliharaan .blank-data p {
-  color: var(--color-text);
-  font-size: 30px;
-  font-weight: 700;
-}
-.rencana-pemeliharaan .input-tanggal input {
-  padding: 10px;
-  font-size: 20px;
-}

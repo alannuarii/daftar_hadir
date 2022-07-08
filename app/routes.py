@@ -42,10 +42,10 @@ def logout():
 
 
 @app.route('/')
-@login_required
+# @login_required
 def index():
     # name = 'Alan Nuari'
-    # email = 'alannuariii@gmail.com'
+    # email = 'email@alan.web.id'
     # password = 'admin123'
     # level = 1
     # admin = User(name=name, email=email, level=level)
