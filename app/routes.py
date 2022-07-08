@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app.models.user import User
+from app.models.agenda import Agenda
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -41,8 +42,8 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/')
-# @login_required
+@app.route('/', methods=['GET','POST'])
+@login_required
 def index():
     # name = 'Alan Nuari'
     # email = 'email@alan.web.id'
@@ -52,6 +53,15 @@ def index():
     # admin.setPassword(password)
     # db.session.add(admin)
     # db.session.commit()
+
+    if request.method == 'POST':
+        tanggal = request.form['tanggal']
+        waktu = request.form['waktu']
+        tempat = request.form['tempat']
+        agenda = request.form['agenda']
+        rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, agenda=agenda)
+        db.session.add(rapat)
+        db.session.commit()
     return render_template('pages/home.html', title='Home | RedPanda', active_home='active')
 
 
