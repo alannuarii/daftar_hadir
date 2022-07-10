@@ -5,6 +5,7 @@ class Agenda(db.Model):
     tanggal = db.Column(db.String(30), nullable=False)
     waktu = db.Column(db.String(10), nullable=False)
     tempat = db.Column(db.String(80), nullable=False)
+    link = db.Column(db.String(250), nullable=True)
     agenda = db.Column(db.String(150), nullable=False)
     absens = db.relationship('Absen', backref='agenda', cascade="all, delete-orphan")
 

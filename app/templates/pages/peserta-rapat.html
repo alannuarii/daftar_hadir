@@ -1,0 +1,148 @@
+{% extends 'layouts/base.html' %} {% block title %}
+<title>{{ title }}</title>
+{% endblock %} {% block content %}
+<main class="container peserta">
+  <div class="row">
+    <div class="col-12">
+      <div class="row d-flex justify-content-end">
+        <div class="col-1 btn-group btn-group-sm mb-2" role="group" aria-label="Basic example">
+          <a href="#" class="btn btn-secondary"><i class="bi-printer"></i> Print</a>
+        </div>
+      </div>
+      <div class="card mb-3 card-judul">
+        <div class="row mb-2">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">Hari/Tanggal</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail3" value="{{guest[0].agenda.tanggal}}" readonly />
+          </div>
+        </div>
+        <div class="row mb-2">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">Waktu</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail3" value="{{guest[0].agenda.waktu}} WITA - Selesai" readonly />
+          </div>
+        </div>
+        <div class="row mb-2">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">Lokasi</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail3" value="{{guest[0].agenda.tempat}}" readonly />
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">Agenda</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail3" value="{{guest[0].agenda.agenda}}" readonly />
+          </div>
+        </div>
+      </div>
+      <div class="card card-peserta text-center rounded-4">
+        <h4 class="fw-bolder">DAFTAR PESERTA RAPAT</h4>
+        <table class="table table-bordered text-center border border-5">
+          <thead class="bg-dark">
+            <tr class="text-light">
+              <th scope="col">No</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Instansi</th>
+              <th scope="col">Jabatan</th>
+              <th scope="col">Email</th>
+              <th scope="col">No. Handphone</th>
+              <th scope="col">Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for guest in guests.items %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td class="text-start">{{guest.nama}}</td>
+              <td>{{guest.instansi}}</td>
+              <td>{{guest.jabatan}}</td>
+              <td>{{guest.email}}</td>
+              <td>{{guest.hp}}</td>
+              <td>
+                <i class="bi-info-circle" data-bs-toggle="modal" data-bs-target="#modal-detail{{guest.id}}"></i>
+                <!-- Modal Detail Peserta -->
+                <div class="modal fade" id="modal-detail{{guest.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body text-start">
+                        <h5 class="text-center fw-bolder mb-3">DETAIL PESERTA RAPAT</h5>
+                        <div class="row mb-2">
+                          <label for="inputEmail3" class="col-sm-4 col-form-label">Nama</label>
+                          <div class="col-sm-8">
+                            <input type="email" class="form-control" id="inputEmail3" value="{{guest.nama}}" readonly />
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <label for="inputEmail3" class="col-sm-4 col-form-label">Instansi</label>
+                          <div class="col-sm-8">
+                            <input type="email" class="form-control" id="inputEmail3" value="{{guest.instansi}}" readonly />
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <label for="inputEmail3" class="col-sm-4 col-form-label">Jabatan</label>
+                          <div class="col-sm-8">
+                            <input type="email" class="form-control" id="inputEmail3" value="{{guest.jabatan}}" readonly />
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <label for="inputEmail3" class="col-sm-4 col-form-label">Email</label>
+                          <div class="col-sm-8">
+                            <input type="email" class="form-control" id="inputEmail3" value="{{guest.email}}" readonly />
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <label for="inputEmail3" class="col-sm-4 col-form-label">No. Handphone</label>
+                          <div class="col-sm-8">
+                            <input type="email" class="form-control" id="inputEmail3" value="{{guest.hp}}" readonly />
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="inputEmail3" class="col-sm-4 col-form-label">Check-In</label>
+                          <div class="col-sm-8">
+                            <input type="email" class="form-control" id="inputEmail3" value="{{guest.checkin}}" readonly />
+                          </div>
+                        </div>
+                        <div class="row d-flex justify-content-center">
+                          <img src="/static/upload/{{guest.ttd}}" class="img-thumbnail p-2 w-50 me-2" alt="" />
+                          <img src="/static/upload/{{guest.qrcode}}" class="img-thumbnail p-2 w-25" alt="" />
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            {% if guests.page != 1 %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('home_coba', page_num=1 ) }}">First</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">First</span></li>
+            {% endif %} {% if guests.has_prev %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('home_coba', page_num=guests.prev_num ) }}">Previous</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+            <li class="page-item disabled"><span class="page-link">Page {{guests.page}} of {{guests.pages}}</span></li>
+            {% if guests.has_next %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('home_coba', page_num=guests.next_num ) }}">Next</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %} {% if guests.has_next %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('home_coba', page_num=guests.pages ) }}">Last</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Last</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

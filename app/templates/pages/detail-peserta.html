@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include 'includes/styles.html' %}{% block title %}
+    <title>{{ title }}</title>
+    {% endblock %}
+    <!-- Favicons -->
+    <link href="{{ url_for('static', filename='img/logo3.svg' ) }}" rel="icon" />
+  </head>
+  <body>
+    {% block content %}
+    <main class="detail-peserta container position-absolute top-0 start-50 translate-middle-x mt-3">
+      <div class="row">
+        <div class="col-8 offset-2">
+          <div class="card mb-3 card-judul">
+            <div class="row mb-2">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Hari/Tanggal</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.agenda.tanggal}}" readonly />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Waktu</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.agenda.waktu}} WITA - Selesai" readonly />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Lokasi</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.agenda.tempat}}" readonly />
+              </div>
+            </div>
+            <div class="row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Agenda</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.agenda.agenda}}" readonly />
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3">
+            <h5 class="text-center fw-bolder mb-3">DETAIL PESERTA RAPAT</h5>
+            <div class="row mb-2">
+              <label for="inputEmail3" class="col-sm-3 col-form-label">Nama</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.nama}}" readonly />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="inputEmail3" class="col-sm-3 col-form-label">Instansi</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.instansi}}" readonly />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="inputEmail3" class="col-sm-3 col-form-label">Jabatan</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.jabatan}}" readonly />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="inputEmail3" class="col-sm-3 col-form-label">Email</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.email}}" readonly />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="inputEmail3" class="col-sm-3 col-form-label">No. Handphone</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.hp}}" readonly />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="inputEmail3" class="col-sm-3 col-form-label">Check-In</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" id="inputEmail3" value="{{guest.checkin}}" readonly />
+              </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+              <img src="/static/upload/{{guest.ttd}}" class="img-thumbnail p-2 w-50" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    {% endblock %} {% include 'includes/scripts.html' %}
+  </body>
+</html>

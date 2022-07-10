@@ -2,10 +2,6 @@
   <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container">
       <a href="/" class="navbar-brand d-flex align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24">
-          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-          <circle cx="12" cy="13" r="4" />
-        </svg>
         <strong>DAFTAR HADIR ONLINE</strong>
       </a>
       {% if current_user.name %}
@@ -32,10 +28,10 @@
       <h3 class="fw-bolder">{{current_user.name}}</h3>
     </div>
     <div class="row sign-out">
-      <a href="{{ url_for('index' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-arrow-right-circle me-2"></i>Check-In</a>
-      <button class="btn btn-primary d-flex align-items-center justify-content-center mb-2" data-bs-toggle="modal" data-bs-target="#modal-input"><i class="bi-journal-plus me-2"></i>Buat Daftar Hadir</button>
-      <a href="{{ url_for('daftar_hadir' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-journal-text me-2"></i>Daftar Hadir Rapat</a>
-      <a href="{{ url_for('logout' ) }}" class="btn btn-secondary d-flex align-items-center justify-content-center"><i class="bi-box-arrow-right me-2"></i>Sign Out</a>
+      <a href="{{ url_for('index' ) }}" class="btn btn-secondary d-flex align-items-center justify-content-center mb-2"><i class="bi-arrow-right-circle me-2"></i>Check-In</a>
+      <button class="btn btn-secondary d-flex align-items-center justify-content-center mb-2" data-bs-toggle="modal" data-bs-target="#modal-input"><i class="bi-journal-plus me-2"></i>Buat Daftar Hadir</button>
+      <a href="{{ url_for('daftar_hadir', page_num=1 ) }}" class="btn btn-secondary d-flex align-items-center justify-content-center mb-2"><i class="bi-journal-text me-2"></i>Daftar Hadir Rapat</a>
+      <a href="{{ url_for('logout' ) }}" class="btn btn-dark d-flex align-items-center justify-content-center"><i class="bi-box-arrow-right me-2"></i>Sign Out</a>
     </div>
   </div>
 </div>
@@ -51,9 +47,9 @@
       <h3 class="fw-bolder">Public User</h3>
     </div>
     <div class="row sign-out">
-      <a href="{{ url_for('index' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-arrow-right-circle me-2"></i>Check-In</a>
-      <a href="{{ url_for('daftar_hadir' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center mb-2"><i class="bi-journal-text me-2"></i>Daftar Hadir Rapat</a>
-      <a href="{{ url_for('login' ) }}" class="btn btn-secondary d-flex align-items-center justify-content-center"><i class="bi-box-arrow-in-right me-2"></i>Sign In</a>
+      <a href="{{ url_for('index' ) }}" class="btn btn-secondary d-flex align-items-center justify-content-center mb-2"><i class="bi-arrow-right-circle me-2"></i>Check-In</a>
+      <a href="{{ url_for('daftar_hadir', page_num=1 ) }}" class="btn btn-secondary d-flex align-items-center justify-content-center mb-2"><i class="bi-journal-text me-2"></i>Daftar Hadir Rapat</a>
+      <a href="{{ url_for('login' ) }}" class="btn btn-dark d-flex align-items-center justify-content-center"><i class="bi-box-arrow-in-right me-2"></i>Sign In</a>
     </div>
   </div>
 </div>
@@ -66,25 +62,29 @@
         <div class="modal-body">
           <h5 class="text-center fw-bolder">BUAT DAFTAR HADIR</h5>
           <div class="form-floating mb-2">
-            <input type="date" class="form-control" id="floatingInput" name="tanggal" />
-            <label for="floatingInput">Hari/Tanggal</label>
+            <input type="date" class="form-control" id="floatingInput" placeholder="Masukkan taggal" name="tanggal" required />
+            <label for="floatingInput">Tanggal</label>
           </div>
           <div class="form-floating mb-2">
-            <input type="time" class="form-control" id="floatingInput" name="waktu" />
+            <input type="time" class="form-control" id="floatingInput" placeholder="Masukkan waktu" name="waktu" required />
             <label for="floatingInput">Waktu</label>
           </div>
           <div class="form-floating mb-2">
-            <input type="text" class="form-control" id="floatingInput" name="tempat" />
+            <input type="text" class="form-control" id="floatingInput" placeholder="Masukkan lokasi rapat" name="tempat" required />
             <label for="floatingInput">Lokasi</label>
           </div>
+          <div class="form-floating mb-2">
+            <input type="text" class="form-control" id="floatingInput" placeholder="Isi jika rapat secara virtual (online meeting)" name="link" />
+            <label for="floatingInput">Link Online Meeting (Jika Rapat Virtual)</label>
+          </div>
           <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput" name="agenda" />
+            <input type="text" class="form-control" id="floatingInput" placeholder="Masukkan judul agenda rapat" name="agenda" required />
             <label for="floatingInput">Agenda</label>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Kirim</button>
+          <button type="submit" class="btn btn-dark">Buat</button>
         </div>
       </form>
     </div>

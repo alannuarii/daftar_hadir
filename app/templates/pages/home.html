@@ -2,18 +2,22 @@
 <title>{{ title }}</title>
 {% endblock %} {% block content %}
 <main class="container home">
+  {% if today %}
   <div class="row">
     <div class="col-12">
       <div class="card text-center rounded-4">
         <h3 class="fw-bolder">AGENDA RAPAT HARI INI</h3>
-        <table class="table table-bordered text-center">
-          <thead>
-            <tr>
+
+        <table class="table table-bordered text-center border border-5">
+          <thead class="bg-dark">
+            <tr class="text-light">
               <th scope="col">No</th>
               <th scope="col">Hari/Tanggal</th>
+              <th scope="col">Waktu</th>
               <th scope="col">Lokasi</th>
               <th scope="col">Agenda</th>
               <th scope="col">Check-In</th>
+              <th scope="col">Link</th>
             </tr>
           </thead>
           <tbody>
@@ -21,10 +25,32 @@
             <tr>
               <td>{{loop.index}}</td>
               <td>{{td.tanggal}}</td>
+              <td>{{td.waktu}} WITA</td>
               <td>{{td.tempat}}</td>
               <td class="text-start">{{td.agenda}}</td>
               <td>
                 <a href="{{ url_for('input_absen', id=td.id ) }}"><i class="bi-arrow-right-circle"></i></a>
+              </td>
+              <td>
+                <i class="bi-link" data-bs-toggle="modal" data-bs-target="#modal-link{{td.id}}"></i>
+                <!-- Modal Link -->
+                <div class="modal fade" id="modal-link{{td.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <div class="input-group mb-3 checklist">
+                          <input type="text" class="form-control link" value="http://127.0.0.1:5000/input-absen/{{td.id}}" disabled />
+                          <span class="input-group-text" id="basic-addon2"><i class="bi-check2-circle"></i></span>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-keluar" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-dark btn-copy">Copy</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Akhir Modal -->
               </td>
             </tr>
             {% endfor %}
@@ -33,5 +59,36 @@
       </div>
     </div>
   </div>
+  {% else %}
+  <div class="row d-flex justify-content-center">
+    <img src="{{ url_for('static', filename='img/meeting.svg' ) }}" class="img-fluid" alt="" />
+  </div>
+  <div class="row mt-4 d-flex justify-content-center">
+    <div class="alert alert-dark text-center fw-bolder w-50" role="alert">
+      TIDAK ADA AGENDA RAPAT HARI INI. YUK, <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-input"><i class="bi-journal-plus me-2"></i>Buat Daftar Hadir</button>
+    </div>
+  </div>
+  {% endif %}
+  <script>
+    const copyButton = document.querySelectorAll(".btn-copy");
+    const copyText = document.querySelectorAll(".link");
+    const checklist = document.querySelectorAll(".checklist span i");
+    const closeButton = document.querySelectorAll(".btn-keluar");
+
+    for (let i = 0; i < copyButton.length; i++) {
+      copyButton[i].addEventListener("click", (e) => {
+        e.preventDefault();
+        copyText[i].select();
+        copyText[i].setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText[i].value);
+        checklist[i].style.visibility = "visible";
+      });
+
+      closeButton[i].addEventListener("click", (e) => {
+        e.preventDefault();
+        checklist[i].style.visibility = "hidden";
+      });
+    }
+  </script>
 </main>
 {% endblock %}

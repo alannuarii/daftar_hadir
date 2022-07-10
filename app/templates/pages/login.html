@@ -5,17 +5,18 @@
     <title>{{ title }}</title>
     {% endblock %}
     <!-- Favicons -->
-    <link href="{{ url_for('static', filename='img/logo3.png' ) }}" rel="icon" />
+    <link href="{{ url_for('static', filename='img/logo3.svg' ) }}" rel="icon" />
   </head>
   <body>
     {% block content %}
-    <main class="form-signin d-flex justify-content-center">
+    <main class="form-signin container">
       <div class="row">
-        <div class="col-12 position-relative">
-          <img src="{{ url_for('static', filename='img/logo3.png' ) }}" class="img-fluid position-absolute start-50 translate-middle" alt="" />
-          <form class="card text-center border rounded-4 shadow-lg" method="post" action="">
-            <h1 class=""><span style="color: #4a0e03">Red</span><span style="color: #ee2110">Panda</span></h1>
-            <h2 class="h3 mb-3 fw-normal">Please sign in</h2>
+        <div class="col-6">
+          <img src="{{ url_for('static', filename='img/login-img.svg' ) }}" class="img-fluid" alt="" />
+        </div>
+        <div class="col-6 position-relative">
+          <form class="card text-center border rounded-4 shadow-lg w-75 position-absolute top-50 end-0 translate-middle-y" method="post" action="">
+            <h2 class="h3 mb-3 fw-bolder">DAFTAR HADIR ONLINE</h2>
             {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}{% if message != 'Please log in to access this page.' %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
               {{message}}
@@ -30,8 +31,8 @@
               <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" />
               <label for="floatingPassword">Password</label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-            <p class="mt-5 mb-3 text-muted">Copyright © 2022 - PT PLN (Persero) UPDK Minahasa</p>
+            <button class="w-100 btn btn-lg btn-dark" type="submit">Sign in</button>
+            <p class="mt-5 mb-3 text-muted">Copyright © 2022 - Daengveloper</p>
           </form>
         </div>
       </div>

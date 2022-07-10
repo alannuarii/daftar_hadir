@@ -1,3 +1,4 @@
+from sqlalchemy import desc
 from app import app
 from app import db
 from flask import render_template, request, redirect, url_for, flash
@@ -6,6 +7,12 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app.models.user import User
 from app.models.agenda import Agenda
+from app.models.absen import Absen
+from PIL import Image
+from io import BytesIO
+import base64
+import os
+import qrcode
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -33,7 +40,7 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
 
-    return render_template('pages/login.html', title='Login | RedPanda', tahun=tahun)
+    return render_template('pages/login.html', title='Login', tahun=tahun)
 
 
 @app.route('/logout')
@@ -60,29 +67,81 @@ def index():
         tanggal = request.form['tanggal']
         waktu = request.form['waktu']
         tempat = request.form['tempat']
+        link = request.form['link']
         agenda = request.form['agenda']
-        rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, agenda=agenda)
+        rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, link=link, agenda=agenda)
         db.session.add(rapat)
         db.session.commit()
-    return render_template('pages/home.html', title='Home | RedPanda', today=rapat_today)
+        return redirect(url_for('index'))
+    # for i in range(100):
+    #     tanggal = '2022-07-09'
+    #     waktu = '09:00'
+    #     tempat = 'Aula Pertemuan'
+    #     agenda = 'Rapat Pembahasan Persiapan Pekerjaan Perbaikan Cooling Tower'
+    #     rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, agenda=agenda)
+    #     db.session.add(rapat)
+    #     db.session.commit()
+    return render_template('pages/home.html', title='Home', today=rapat_today)
 
 
 @app.route('/input-absen/<id>', methods=['GET','POST'])
 def input_absen(id):
     rapat = Agenda.query.filter_by(id=id).first()
+    
     if request.method == 'POST':
-        tanggal = request.form['tanggal']
-        waktu = request.form['waktu']
-        tempat = request.form['tempat']
-        agenda = request.form['agenda']
-        rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, agenda=agenda)
-        db.session.add(rapat)
+        nama = request.form['nama']
+        instansi = request.form['instansi']
+        jabatan = request.form['jabatan']
+        email = request.form['email']
+        hp = request.form['hp']
+        agenda_id = request.form['agenda_id']
+        ttd = request.form['ttd']
+        new_ttd = ttd.replace('data:image/png;base64,', '')
+        bytes_decoded = base64.b64decode(new_ttd)
+        img = Image.open(BytesIO(bytes_decoded))
+        out_jpg = img.convert("RGB")
+
+        # Random Name 
+        now = datetime.now()
+        microsecond = now.strftime('%f')  
+        filename = nama+'-'+microsecond+'.png'
+        qrcodename = 'qr'+nama+'-'+microsecond+'.png'
+
+        # QR Code Generate 
+        qr = qrcode.QRCode()
+        qr.add_data('http://127.0.0.1:5000/detail-peserta/{}'.format(microsecond))
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        absen = Absen(nama=nama, instansi=instansi, jabatan=jabatan, email=email, hp=hp, agenda_id=agenda_id, ttd=filename, qrcode=qrcodename, id=microsecond)
+        db.session.add(absen)
         db.session.commit()
-    return render_template('pages/input-absen.html', title='Home | RedPanda', rapat=rapat)
+        out_jpg.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        img.save(os.path.join(app.config['UPLOAD_FOLDER'], qrcodename))
+        
+        return redirect(url_for('peserta_rapat', agenda_id=agenda_id, page_num=1))
+
+    return render_template('pages/input-absen.html', title='Input Daftar Hadir', rapat=rapat)
 
 
-@app.route('/daftar-hadir')
-def daftar_hadir():
-    rapat_all = Agenda.query.all()
+@app.route('/daftar-hadir/<int:page_num>')
+def daftar_hadir(page_num):
+    rapat_all = Agenda.query.order_by(desc('tanggal')).paginate(per_page=10, page=page_num, error_out=True)
 
-    return render_template('pages/daftar-hadir.html', title='Home | RedPanda', rapats=rapat_all)
+    return render_template('pages/daftar-hadir.html', title='Daftar Hadir Rapat', rapats=rapat_all)
+
+
+@app.route('/peserta-rapat/<agenda_id>/<int:page_num>')
+def peserta_rapat(agenda_id, page_num):
+    guest = Absen.query.filter_by(agenda_id=agenda_id)
+    peserta = Absen.query.filter_by(agenda_id=agenda_id).paginate(per_page=10, page=page_num, error_out=True)
+
+    return render_template('pages/peserta-rapat.html', title='Peserta Rapat', guests=peserta, guest=guest)
+
+
+@app.route('/detail-peserta/<id>')
+def detail_peserta(id):
+    peserta = Absen.query.filter_by(id=id).first()
+    print(peserta)
+
+    return render_template('pages/detail-peserta.html', title='Detail Peserta Rapat', guest=peserta)

@@ -16,17 +16,14 @@ a {
 }
 
 body {
-  /* min-height: 75rem; */
+  background-image: url("../img/background.jpg");
   padding-top: 5rem;
 }
 
 /* LOGIN */
-.form-signin {
-  margin-top: 8rem;
-}
-.form-signin .row {
-  width: 30%;
-}
+/* .form-signin{
+  
+} */
 .form-signin .card {
   padding: 15px;
 }
@@ -39,13 +36,6 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-}
-.form-signin img {
-  width: 65%;
-  top: -40px;
-}
-.form-signin h1 {
-  font-family: "Cooper Black", sans-serif;
 }
 .form-signin p {
   font-size: 10px;
@@ -76,4 +66,42 @@ body {
 /* HOME */
 .home .card {
   padding: 10px;
+}
+.home img {
+  width: 40%;
+}
+.home .bi-link {
+  cursor: pointer;
+}
+.home .checklist span i {
+  visibility: hidden;
+}
+
+/* INPUT ABSEN */
+.input-absen .card {
+  padding: 10px;
+}
+.input-absen #sig-canvas {
+  border: 2px dotted #cccccc;
+  border-radius: 15px;
+  cursor: crosshair;
+}
+.input-absen .link {
+  cursor: pointer;
+}
+
+/* PESERTA */
+.peserta .card-judul {
+  padding: 20px;
+}
+.peserta .card-peserta {
+  padding: 10px;
+}
+.peserta table i {
+  cursor: pointer;
+}
+
+/* DETAIL PESERTA */
+.detail-peserta .card {
+  padding: 20px 30px;
 }

@@ -1,67 +1,266 @@
 {% extends 'layouts/base.html' %} {% block title %}
 <title>{{ title }}</title>
 {% endblock %} {% block content %}
-<main class="container home">
+<main class="container input-absen">
   <div class="row">
     <div class="col-lg-8 offset-lg-2">
-      <div class="card rounded-4">
+      <div class="card rounded-4 mb-4">
         <h3 class="fw-bolder text-center">INPUT DAFTAR HADIR</h3>
         <div class="card mb-3">
           <div class="row mb-2">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Hari/Tanggal</label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control" id="inputEmail3" value="{{rapat.tanggal}}" readonly />
+            <label for="inputEmail3" class="col-sm-3 col-form-label">Hari/Tanggal</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputEmail3" value="{{rapat.tanggal}}" readonly />
             </div>
           </div>
           <div class="row mb-2">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Waktu</label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control" id="inputEmail3" value="{{rapat.waktu}}" readonly />
+            <label for="inputEmail3" class="col-sm-3 col-form-label">Waktu</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputEmail3" value="{{rapat.waktu}} WITA - Selesai" readonly />
             </div>
           </div>
           <div class="row mb-2">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Lokasi</label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control" id="inputEmail3" value="{{rapat.tempat}}" readonly />
+            <label for="inputEmail3" class="col-sm-3 col-form-label">Lokasi</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputEmail3" value="{{rapat.tempat}}" readonly />
             </div>
           </div>
+          {% if rapat.link == '' %} {% else %}
+          <div class="row mb-2">
+            <label for="inputEmail3" class="col-sm-3 col-form-label">Link Online Meeting</label>
+            <div class="col-sm-9">
+              <a href="{{rapat.link}}" target="_blank"><input type="text" class="form-control link" id="inputEmail3" value="{{rapat.link}}" readonly /></a>
+            </div>
+          </div>
+          {% endif %}
           <div class="row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Agenda</label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control" id="inputEmail3" value="{{rapat.agenda}}" readonly />
+            <label for="inputEmail3" class="col-sm-3 col-form-label">Agenda</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="inputEmail3" value="{{rapat.agenda}}" readonly />
             </div>
           </div>
         </div>
         <form action="" method="post">
           <div class="text-center">
             <div class="form-floating mb-2">
-              <input type="text" class="form-control" id="floatingInput" name="nama" />
+              <input type="text" class="form-control" id="floatingInput" placeholder="Masukkan nama lengkap" name="nama" required />
               <label for="floatingInput">Nama Lengkap</label>
             </div>
             <div class="form-floating mb-2">
-              <input type="text" class="form-control" id="floatingInput" name="instansi" />
+              <input type="text" class="form-control" id="floatingInput" placeholder="Masukkan instansi" name="instansi" />
               <label for="floatingInput">Instansi</label>
             </div>
             <div class="form-floating mb-2">
-              <input type="text" class="form-control" id="floatingInput" name="jabatan" />
+              <input type="text" class="form-control" id="floatingInput" placeholder="Masukkan jabatan" name="jabatan" />
               <label for="floatingInput">Jabatan</label>
             </div>
             <div class="form-floating mb-2">
-              <input type="email" class="form-control" id="floatingInput" name="email" />
+              <input type="email" class="form-control" id="floatingInput" placeholder="Masukkan email" name="email" />
               <label for="floatingInput">Email</label>
             </div>
             <div class="form-floating mb-2">
-              <input type="number" class="form-control" id="floatingInput" name="hp" />
+              <input type="number" class="form-control" id="floatingInput" placeholder="Masukkan nomor handphone" name="hp" />
               <label for="floatingInput">No. Handphone</label>
+            </div>
+            <div class="mb-3 border rounded-2 p-2">
+              <div class="row">
+                <div class="col-12">
+                  <h5>E-Signature</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <canvas id="sig-canvas" width="350" height="160"> Get a better browser, bro. </canvas>
+                  <input type="hidden" name="ttd" value="" class="ttd" required />
+                  <input type="hidden" name="agenda_id" value="{{rapat.id}}" />
+                </div>
+              </div>
             </div>
           </div>
           <div class="d-flex justify-content-center">
-            <button type="reset" class="btn btn-secondary me-1">Reset</button>
-            <button type="submit" class="btn btn-primary">Check-In</button>
+            <input type="button" value="Reset" class="btn btn-secondary me-1" id="sig-clearBtn" />
+            <button id="sig-submitBtn" type="submit" class="btn btn-dark">Check-In</button>
           </div>
         </form>
       </div>
     </div>
   </div>
+
+  <script>
+    (function () {
+      window.requestAnimFrame = (function (callback) {
+        return (
+          window.requestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.oRequestAnimationFrame ||
+          window.msRequestAnimaitonFrame ||
+          function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+          }
+        );
+      })();
+
+      var canvas = document.getElementById("sig-canvas");
+      var ctx = canvas.getContext("2d");
+      ctx.strokeStyle = "#222222";
+      ctx.lineWidth = 1;
+
+      var drawing = false;
+      var mousePos = {
+        x: 0,
+        y: 0,
+      };
+      var lastPos = mousePos;
+
+      canvas.addEventListener(
+        "mousedown",
+        function (e) {
+          drawing = true;
+          lastPos = getMousePos(canvas, e);
+        },
+        false
+      );
+
+      canvas.addEventListener(
+        "mouseup",
+        function (e) {
+          drawing = false;
+        },
+        false
+      );
+
+      canvas.addEventListener(
+        "mousemove",
+        function (e) {
+          mousePos = getMousePos(canvas, e);
+        },
+        false
+      );
+
+      // Add touch event support for mobile
+      canvas.addEventListener("touchstart", function (e) {}, false);
+
+      canvas.addEventListener(
+        "touchmove",
+        function (e) {
+          var touch = e.touches[0];
+          var me = new MouseEvent("mousemove", {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+          });
+          canvas.dispatchEvent(me);
+        },
+        false
+      );
+
+      canvas.addEventListener(
+        "touchstart",
+        function (e) {
+          mousePos = getTouchPos(canvas, e);
+          var touch = e.touches[0];
+          var me = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+          });
+          canvas.dispatchEvent(me);
+        },
+        false
+      );
+
+      canvas.addEventListener(
+        "touchend",
+        function (e) {
+          var me = new MouseEvent("mouseup", {});
+          canvas.dispatchEvent(me);
+        },
+        false
+      );
+
+      function getMousePos(canvasDom, mouseEvent) {
+        var rect = canvasDom.getBoundingClientRect();
+        return {
+          x: mouseEvent.clientX - rect.left,
+          y: mouseEvent.clientY - rect.top,
+        };
+      }
+
+      function getTouchPos(canvasDom, touchEvent) {
+        var rect = canvasDom.getBoundingClientRect();
+        return {
+          x: touchEvent.touches[0].clientX - rect.left,
+          y: touchEvent.touches[0].clientY - rect.top,
+        };
+      }
+
+      function renderCanvas() {
+        if (drawing) {
+          ctx.moveTo(lastPos.x, lastPos.y);
+          ctx.lineTo(mousePos.x, mousePos.y);
+          ctx.stroke();
+          lastPos = mousePos;
+        }
+      }
+
+      // Prevent scrolling when touching the canvas
+      document.body.addEventListener(
+        "touchstart",
+        function (e) {
+          if (e.target == canvas) {
+            e.preventDefault();
+          }
+        },
+        false
+      );
+      document.body.addEventListener(
+        "touchend",
+        function (e) {
+          if (e.target == canvas) {
+            e.preventDefault();
+          }
+        },
+        false
+      );
+      document.body.addEventListener(
+        "touchmove",
+        function (e) {
+          if (e.target == canvas) {
+            e.preventDefault();
+          }
+        },
+        false
+      );
+
+      (function drawLoop() {
+        requestAnimFrame(drawLoop);
+        renderCanvas();
+      })();
+
+      function clearCanvas() {
+        window.location.reload("Reset");
+      }
+
+      // Set up the UI
+      var clearBtn = document.getElementById("sig-clearBtn");
+      var submitBtn = document.getElementById("sig-submitBtn");
+      var ttd = document.querySelector(".ttd");
+
+      clearBtn.addEventListener(
+        "click",
+        function (e) {
+          clearCanvas();
+        },
+        false
+      );
+      submitBtn.addEventListener(
+        "click",
+        function (e) {
+          var dataUrl = canvas.toDataURL();
+          ttd.value = dataUrl;
+        },
+        false
+      );
+    })();
+  </script>
 </main>
 {% endblock %}
