@@ -6,7 +6,7 @@
     <div class="col-12">
       <div class="row d-flex justify-content-end">
         <div class="col-1 btn-group btn-group-sm mb-2" role="group" aria-label="Basic example">
-          <a href="#" class="btn btn-secondary"><i class="bi-printer"></i> Print</a>
+          <a href="{{ url_for('konversi', agenda_id=guest[0].agenda_id, page_num=1 ) }}" target="_blank" class="btn btn-secondary"><i class="bi-printer"></i> Print</a>
         </div>
       </div>
       <div class="card mb-3 card-judul">

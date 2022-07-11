@@ -1,7 +1,7 @@
 from sqlalchemy import desc
 from app import app
 from app import db
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, make_response
 from datetime import datetime, timedelta
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
@@ -13,6 +13,8 @@ from io import BytesIO
 import base64
 import os
 import qrcode
+import pdfkit
+
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -145,3 +147,15 @@ def detail_peserta(id):
     print(peserta)
 
     return render_template('pages/detail-peserta.html', title='Detail Peserta Rapat', guest=peserta)
+
+
+@app.route('/konversi/<agenda_id>/<int:page_num>')
+def konversi(agenda_id, page_num):
+    res = 'http://127.0.0.1:5000/peserta-rapat/{}/{}'.format(agenda_id, page_num)
+    path_wkthmltopdf = b'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'
+    config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
+    responsestring = pdfkit.from_url(res, configuration=config)
+    response = make_response(responsestring)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline;filename=output.pdf'
+    return response

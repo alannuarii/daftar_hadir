@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %} {% block title %}
 <title>{{ title }}</title>
 {% endblock %} {% block content %}
-<main class="container home">
+<main class="container daftar-hadir">
   <div class="row">
     <div class="col-12">
       <div class="card text-center rounded-4">
@@ -24,7 +24,11 @@
               <td>{{rapat.tempat}}</td>
               <td class="text-start">{{rapat.agenda}}</td>
               <td>
-                <a href="{{ url_for('peserta_rapat', agenda_id=rapat.id, page_num=1 ) }}"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></a>
+                {% if rapat.absens|length == 0 %}
+                <button class="btn" onclick="showAlert()"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></button>
+                {% else %}
+                <a class="btn" href="{{ url_for('peserta_rapat', agenda_id=rapat.id, page_num=1 ) }}"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></a>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}
@@ -56,5 +60,12 @@
       </div>
     </div>
   </div>
+  <script>
+    function showAlert() {
+      swal("Tidak ada peserta rapat", {
+        button: false,
+      });
+    }
+  </script>
 </main>
 {% endblock %}
