@@ -119,3 +119,34 @@ body {
 .detail-peserta .card {
   padding: 20px 30px;
 }
+
+/* CETAK ABSEN */
+.cetak-absen img {
+  width: 50px;
+}
+.cetak-absen table {
+  width: 100%;
+}
+.cetak-absen .table-1 .th1 {
+  width: 45%;
+  font-size: 12px;
+}
+.cetak-absen .th2,
+.cetak-absen .th4 {
+  width: 20%;
+}
+.cetak-absen .table-2 th:nth-child(1) {
+  width: 5%;
+}
+.cetak-absen .table-2 th:nth-child(2) {
+  width: 25%;
+}
+.cetak-absen .table-2 th:nth-child(7) {
+  width: 10%;
+}
+.cetak-absen .table-2 th:nth-child(3),
+.cetak-absen .table-2 th:nth-child(4),
+.cetak-absen .table-2 th:nth-child(5),
+.cetak-absen .table-2 th:nth-child(6) {
+  width: 15%;
+}

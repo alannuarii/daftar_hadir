@@ -149,9 +149,16 @@ def detail_peserta(id):
     return render_template('pages/detail-peserta.html', title='Detail Peserta Rapat', guest=peserta)
 
 
-@app.route('/konversi/<agenda_id>/<int:page_num>')
-def konversi(agenda_id, page_num):
-    res = 'http://127.0.0.1:5000/peserta-rapat/{}/{}'.format(agenda_id, page_num)
+@app.route('/cetak-absen/<agenda_id>')
+def cetak_absen(agenda_id):
+    guest = Absen.query.filter_by(agenda_id=agenda_id)
+
+    return render_template('pages/cetak-absen.html', title='Cetak Daftar Hadir', guests=guest)
+
+
+@app.route('/absen-pdf/<agenda_id>')
+def konversi(agenda_id):
+    res = 'http://127.0.0.1:5000/cetak-absen/{}'.format(agenda_id)
     path_wkthmltopdf = b'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'
     config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
     responsestring = pdfkit.from_url(res, configuration=config)

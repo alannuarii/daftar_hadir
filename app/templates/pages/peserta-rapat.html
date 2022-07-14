@@ -6,7 +6,7 @@
     <div class="col-12">
       <div class="row d-flex justify-content-end">
         <div class="col-1 btn-group btn-group-sm mb-2" role="group" aria-label="Basic example">
-          <a href="{{ url_for('konversi', agenda_id=guest[0].agenda_id, page_num=1 ) }}" target="_blank" class="btn btn-secondary"><i class="bi-printer"></i> Print</a>
+          <a href="{{ url_for('konversi', agenda_id=guest[0].agenda_id ) }}" target="_blank" class="btn btn-secondary"><i class="bi-printer"></i> Print</a>
         </div>
       </div>
       <div class="card mb-3 card-judul">
@@ -121,21 +121,21 @@
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             {% if guests.page != 1 %}
-            <li class="page-item"><a class="page-link" href="{{ url_for('home_coba', page_num=1 ) }}">First</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('peserta_rapat', page_num=1, agenda_id=guest[0].agenda_id ) }}">First</a></li>
             {% else %}
             <li class="page-item disabled"><span class="page-link">First</span></li>
             {% endif %} {% if guests.has_prev %}
-            <li class="page-item"><a class="page-link" href="{{ url_for('home_coba', page_num=guests.prev_num ) }}">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('peserta_rapat', page_num=guests.prev_num, agenda_id=guest[0].agenda_id ) }}">Previous</a></li>
             {% else %}
             <li class="page-item disabled"><span class="page-link">Previous</span></li>
             {% endif %}
             <li class="page-item disabled"><span class="page-link">Page {{guests.page}} of {{guests.pages}}</span></li>
             {% if guests.has_next %}
-            <li class="page-item"><a class="page-link" href="{{ url_for('home_coba', page_num=guests.next_num ) }}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('peserta_rapat', page_num=guests.next_num, agenda_id=guest[0].agenda_id ) }}">Next</a></li>
             {% else %}
             <li class="page-item disabled"><span class="page-link">Next</span></li>
             {% endif %} {% if guests.has_next %}
-            <li class="page-item"><a class="page-link" href="{{ url_for('home_coba', page_num=guests.pages ) }}">Last</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('peserta_rapat', page_num=guests.pages, agenda_id=guest[0].agenda_id ) }}">Last</a></li>
             {% else %}
             <li class="page-item disabled"><span class="page-link">Last</span></li>
             {% endif %}

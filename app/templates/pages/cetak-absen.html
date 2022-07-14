@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include 'includes/styles.html' %}{% block title %}
+    <title>{{ title }}</title>
+    {% endblock %}
+    <!-- Favicons -->
+    <link href="{{ url_for('static', filename='img/logo3.svg' ) }}" rel="icon" />
+  </head>
+  <body style="background-image: none; padding-top: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 15px">
+    {% block content %}
+    <main class="cetak-absen container">
+      <div class="row">
+        <table class="table table-1 table-bordered text-center border border-5">
+          <thead>
+            <tr class="align-middle">
+              <th class="text-start th1" scope="col" rowspan="2">
+                PT PLN (PERSERO) <br />UNIT INDUK PEMBANGKITAN DAN PENYALURAN SULAWESI <br />UNIT PELAKSANA PENGENDALIAN PEMBANGKITAN MINAHASA <br />UNIT LAYANAN PUSAT LISTRIK TENAGA DIESEL KOTAMOBAGU
+              </th>
+              <th class="th2">FORMULIR</th>
+              <th class="th3" scope="col" rowspan="2">DAFTAR HADIR</th>
+            </tr>
+            <tr class="align-middle">
+              <th class="th4">SMI-SPM-FR-U-025</th>
+            </tr>
+          </thead>
+        </table>
+        <table class="table table-2 table-bordered text-center border border-5">
+          <thead class="">
+            <tr class="text-start">
+              <th scope="col" colspan="2">Hari/Tanggal</th>
+              <th scope="col" colspan="5">{{guests[0].agenda.tanggal}}</th>
+            </tr>
+            <tr class="text-start">
+              <th scope="col" colspan="2">Waktu</th>
+              <th scope="col" colspan="5">{{guests[0].agenda.waktu}} WITA - Selesai</th>
+            </tr>
+            <tr class="text-start">
+              <th scope="col" colspan="2">Lokasi</th>
+              <th scope="col" colspan="5">{{guests[0].agenda.tempat}}</th>
+            </tr>
+            <tr class="text-start">
+              <th scope="col" colspan="2">Agenda</th>
+              <th scope="col" colspan="5">{{guests[0].agenda.agenda}}</th>
+            </tr>
+            <tr class="">
+              <th scope="col">No</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Instansi</th>
+              <th scope="col">Jabatan</th>
+              <th scope="col">Email</th>
+              <th scope="col">No. Handphone</th>
+              <th scope="col">Info</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for guest in guests %}
+            <tr class="align-middle">
+              <td>{{loop.index}}</td>
+              <td class="text-start">{{guest.nama}}</td>
+              <td>{{guest.instansi}}</td>
+              <td>{{guest.jabatan}}</td>
+              <td>{{guest.email}}</td>
+              <td>{{guest.hp}}</td>
+              <td><img src="/static/upload/{{guest.qrcode}}" alt="" /></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+    {% endblock %} {% include 'includes/scripts.html' %}
+  </body>
+</html>
