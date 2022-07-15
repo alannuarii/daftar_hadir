@@ -5,6 +5,7 @@ from flask import render_template, request, redirect, url_for, flash, make_respo
 from datetime import datetime, timedelta
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
+from app.controller import tanggal
 from app.models.user import User
 from app.models.agenda import Agenda
 from app.models.absen import Absen
@@ -63,15 +64,16 @@ def index():
     # db.session.commit()
 
     today = datetime.now().strftime('%Y-%m-%d')
-    rapat_today = Agenda.query.filter_by(tanggal=today).all()
+    rapat_today = Agenda.query.filter_by(tanggal_real=today).all()
 
     if request.method == 'POST':
-        tanggal = request.form['tanggal']
+        str_tanggal = request.form['tanggal']
         waktu = request.form['waktu']
         tempat = request.form['tempat']
         link = request.form['link']
         agenda = request.form['agenda']
-        rapat = Agenda(tanggal=tanggal, waktu=waktu, tempat=tempat, link=link, agenda=agenda)
+        user_id = request.form['user_id']
+        rapat = Agenda(tanggal=tanggal(str_tanggal), tanggal_real=str_tanggal, waktu=waktu, tempat=tempat, link=link, agenda=agenda, user_id=user_id)
         db.session.add(rapat)
         db.session.commit()
         return redirect(url_for('index'))
@@ -154,6 +156,13 @@ def cetak_absen(agenda_id):
     guest = Absen.query.filter_by(agenda_id=agenda_id)
 
     return render_template('pages/cetak-absen.html', title='Cetak Daftar Hadir', guests=guest)
+
+
+@app.route('/pengaturan/<id>/<int:page_num>')
+def pengaturan(id, page_num):
+    rapats = Agenda.query.filter_by(user_id=id).paginate(per_page=10, page=page_num, error_out=True)
+
+    return render_template('pages/pengaturan.html', title='Pengaturan', rapats=rapats)
 
 
 @app.route('/absen-pdf/<agenda_id>')

@@ -150,3 +150,8 @@ body {
 .cetak-absen .table-2 th:nth-child(6) {
   width: 15%;
 }
+
+/* PENGATURAN */
+.pengaturan .card {
+  padding: 10px;
+}

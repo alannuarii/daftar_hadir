@@ -1,0 +1,61 @@
+{% extends 'layouts/base.html' %} {% block title %}
+<title>{{ title }}</title>
+{% endblock %} {% block content %}
+<main class="container pengaturan">
+  <div class="row">
+    <div class="col-12">
+      <div class="card text-center rounded-4">
+        <h3 class="fw-bolder">DAFTAR HADIR RAPAT</h3>
+        <table class="table table-bordered text-center border border-5">
+          <thead class="bg-dark">
+            <tr class="text-light">
+              <th scope="col">No</th>
+              <th scope="col">Hari/Tanggal</th>
+              <th scope="col">Agenda</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rapat in rapats.items %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{rapat.tanggal}}</td>
+              <td class="text-start">{{rapat.agenda}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            {% if rapats.page != 1 %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('pengaturan', page_num=1, id=rapats[0].user_id ) }}">First</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">First</span></li>
+            {% endif %} {% if rapats.has_prev %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('pengaturan', page_num=rapats.prev_num, id=rapats[0].user_id ) }}">Previous</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+            <li class="page-item disabled"><span class="page-link">Page {{rapats.page}} of {{rapats.pages}}</span></li>
+            {% if rapats.has_next %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('pengaturan', page_num=rapats.next_num, id=rapats[0].user_id ) }}">Next</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %} {% if rapats.has_next %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('pengaturan', page_num=rapats.pages, id=rapats[0].user_id ) }}">Last</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Last</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    function showAlert() {
+      swal("Tidak ada peserta rapat", {
+        button: false,
+      });
+    }
+  </script>
+</main>
+{% endblock %}
