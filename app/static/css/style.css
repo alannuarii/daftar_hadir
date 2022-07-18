@@ -17,7 +17,7 @@ a {
 
 body {
   background-image: url("../img/background.jpg");
-  padding-top: 5rem;
+  padding-top: 5.5rem;
 }
 
 /* LOGIN */
@@ -62,6 +62,10 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+.navbar i {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
 
 /* HOME */
 .home .card {
@@ -94,7 +98,7 @@ body {
 .daftar-hadir .card {
   padding: 10px;
 }
-.daftar-hadir .btn {
+.daftar-hadir .btn-peserta {
   background: none;
   color: inherit;
   border: none;
@@ -152,6 +156,9 @@ body {
 }
 
 /* PENGATURAN */
+.pengaturan img {
+  width: 72%;
+}
 .pengaturan .card {
   padding: 10px;
 }
@@ -172,4 +179,26 @@ body {
   font: inherit;
   cursor: pointer;
   outline: inherit;
+}
+.pengaturan .profile i {
+  font-size: 10rem;
+  margin-bottom: -1.5rem;
+}
+.pengaturan .profile p {
+  margin-top: -0.5rem;
+}
+.pengaturan .table th:nth-child(1) {
+  width: 5%;
+}
+.pengaturan .table th:nth-child(2) {
+  width: 20%;
+}
+.pengaturan .table th:nth-child(3) {
+  width: 49%;
+}
+.pengaturan .table th:nth-child(4) {
+  width: 26%;
+}
+.pengaturan .checklist span i {
+  visibility: hidden;
 }

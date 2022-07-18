@@ -3,73 +3,172 @@
 {% endblock %} {% block content %}
 <main class="container pengaturan">
   <div class="row">
-    <div class="col-12">
+    <div class="col-3">
+      <div class="card rounded-4">
+        <div class="row profile text-center">
+          <i class="bi-person-circle text-secondary"></i>
+          <h3 class="fw-bolder">{{current_user.name}}</h3>
+          <p>({{current_user.email}})</p>
+        </div>
+        <hr />
+        <button class="btn btn-lg btn-secondary d-flex align-items-center justify-content-center mb-2" data-bs-toggle="modal" data-bs-target="#modal-input"><i class="bi-journal-plus me-2"></i>Buat Daftar Hadir</button>
+        {% if current_user.level == 1 %}
+        <button class="btn btn-lg btn-secondary d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#modal-registrasi"><i class="bi-person-plus me-2"></i>Registrasi</button>
+        {% else %} {% endif %}
+      </div>
+    </div>
+    <div class="col-9">
+      {% if rapats.items %}
       <div class="card text-center rounded-4">
         <h3 class="fw-bolder">DAFTAR HADIR RAPAT</h3>
-        <table class="table table-bordered text-center border border-5">
-          <thead class="bg-dark">
-            <tr class="text-light">
-              <th scope="col">No</th>
-              <th scope="col">Hari/Tanggal</th>
-              <th scope="col">Agenda</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for rapat in rapats.items %}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{rapat.tanggal}}</td>
-              <td class="text-start">{{rapat.agenda}}</td>
-              <td class="d-flex align-items-center justify-content-center">
-                {% if rapat.absens|length == 0 %}
-                <div class="btn btn-people me-4" onclick="showAlert()"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></div>
-                {% else %}
-                <a class="btn btn-people me-4" href="{{ url_for('peserta_rapat', agenda_id=rapat.id, page_num=1 ) }}"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></a>
-                {% endif %}<i class="bi-pencil-square me-4" data-bs-toggle="modal" data-bs-target="#modal{{rapat.absens.id}}"></i><i class="bi-trash3 me-4"></i><i class="bi-printer"></i>
-              </td>
-              <!-- Awal Modal -->
-              <div class="modal fade" id="modal{{rapat.absens.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <form action="" method="post">
-                      <!-- <input type="hidden" name="user_id" value="{{current_user.id}}" /> -->
+        <div class="table-responsive">
+          <table class="table table-bordered text-center border border-5">
+            <thead class="bg-dark">
+              <tr class="text-light">
+                <th scope="col">No</th>
+                <th scope="col">Hari/Tanggal</th>
+                <th scope="col">Agenda</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rapat in rapats.items %}
+              <tr class="align-middle">
+                <td>{{((rapats.page-1)*10)+loop.index}}</td>
+                <td>{{rapat.tanggal}}</td>
+                <td class="text-start">{{rapat.agenda}}</td>
+                <td class="">
+                  <div class="d-flex justify-content-center align-items-center">
+                    {% if rapat.absens|length == 0 %}
+                    <div class="btn btn-people me-4" onclick="showAlert()">
+                      <i class="bi-people" data-bs-toggle="tooltip" data-bs-placement="top" title="Peserta"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span>
+                    </div>
+                    {% else %}
+                    <a class="btn btn-people me-4" href="{{ url_for('peserta_rapat', agenda_id=rapat.id, page_num=1 ) }}"
+                      ><i class="bi-people" data-bs-toggle="tooltip" data-bs-placement="top" title="Peserta"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></a
+                    >
+                    {% endif %}<span data-bs-toggle="modal" data-bs-target="#modal{{rapat.id}}"><i class="bi-pencil-square me-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></span
+                    ><span data-bs-toggle="modal" data-bs-target="#modal-hapus{{rapat.id}}"><i class="bi-trash3 me-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus"></i></span
+                    ><a href="{{ url_for('konversi', agenda_id=rapat.id ) }}" target="_blank"><i class="bi-printer me-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Print"></i></a
+                    ><span data-bs-toggle="modal" data-bs-target="#modal-link{{rapat.id}}"><i class="bi-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Link"></i></span>
+                  </div>
+                </td>
+                <!-- Awal Modal Input -->
+                <div class="modal fade" id="modal{{rapat.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form action="" method="post">
+                        <input type="hidden" name="id" value="{{rapat.id}}" />
+                        <div class="modal-body">
+                          <h5 class="text-center fw-bolder">EDIT DAFTAR HADIR</h5>
+                          <div class="form-floating mb-2">
+                            <input type="date" class="form-control" id="floatingInput" name="tanggal" value="{{rapat.tanggal_real}}" />
+                            <label for="floatingInput">Tanggal</label>
+                          </div>
+                          <div class="form-floating mb-2">
+                            <input type="time" class="form-control" id="floatingInput" name="waktu" value="{{rapat.waktu}}" />
+                            <label for="floatingInput">Waktu</label>
+                          </div>
+                          <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="floatingInput" name="tempat" value="{{rapat.tempat}}" />
+                            <label for="floatingInput">Lokasi</label>
+                          </div>
+                          <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="floatingInput" name="link" value="{{rapat.link}}" />
+                            <label for="floatingInput">Link Online Meeting (Jika Rapat Virtual)</label>
+                          </div>
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingInput" name="agenda" value="{{rapat.agenda}}" />
+                            <label for="floatingInput">Agenda</label>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-dark" name="update">Simpan</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- Akhir Modal Input -->
+                <!-- Awal Modal Registrasi -->
+                <div class="modal fade" id="modal-registrasi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form action="" method="post">
+                        <div class="modal-body">
+                          <h5 class="text-center fw-bolder">REGISTRASI USER</h5>
+                          <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="Masukkan nama lengkap" name="name" required />
+                            <label for="floatingInput">Nama Lengkap</label>
+                          </div>
+                          <div class="form-floating mb-2">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="Masukkan email" name="email" required />
+                            <label for="floatingInput">Email</label>
+                          </div>
+                          <div class="form-floating mb-2">
+                            <input type="password" class="form-control" id="floatingInput" placeholder="Masukkan password" name="password" required />
+                            <label for="floatingInput">Password</label>
+                          </div>
+                          <div class="d-flex justify-content-start align-items-center border py-3 px-2 rounded-2">
+                            <div class="me-5">Level User</div>
+                            <div class="form-check me-4">
+                              <input class="form-check-input" type="radio" name="level" id="flexRadioDefault1" value="1" />
+                              <label class="form-check-label" for="flexRadioDefault1"> Superuser </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="level" id="flexRadioDefault2" value="2" />
+                              <label class="form-check-label" for="flexRadioDefault2"> User </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-dark" name="register">Register</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- Akhir Modal Registrasi -->
+                <!-- Awal Modal Hapus  -->
+                <div class="modal fade" id="modal-hapus{{rapat.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
                       <div class="modal-body">
-                        <h5 class="text-center fw-bolder">EDIT DAFTAR HADIR</h5>
-                        <div class="form-floating mb-2">
-                          <input type="date" class="form-control" id="floatingInput" name="tanggal" value="{{rapat.tanggal_real}}" />
-                          <label for="floatingInput">Tanggal</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                          <input type="time" class="form-control" id="floatingInput" name="waktu" value="{{rapat.waktu}}" />
-                          <label for="floatingInput">Waktu</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                          <input type="text" class="form-control" id="floatingInput" name="tempat" value="{{rapat.tempat}}" />
-                          <label for="floatingInput">Lokasi</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                          <input type="text" class="form-control" id="floatingInput" name="link" value="{{rapat.link}}" />
-                          <label for="floatingInput">Link Online Meeting (Jika Rapat Virtual)</label>
-                        </div>
-                        <div class="form-floating">
-                          <input type="text" class="form-control" id="floatingInput" name="agenda" value="{{rapat.agenda}}" />
-                          <label for="floatingInput">Agenda</label>
-                        </div>
+                        <p>Apakah Anda yakin ingin menghapus agenda?</p>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-dark">Simpan</button>
+                        <a href="{{ url_for('hapus_agenda', id=rapat.id ) }}" type="button" class="btn btn-dark">Hapus</a>
                       </div>
-                    </form>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!-- Akhir Modal  -->
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+                <!-- Akhir Modal Hapus  -->
+                <!-- Modal Link -->
+                <div class="modal fade" id="modal-link{{rapat.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <div class="input-group mb-3 checklist">
+                          <input type="text" class="form-control link" value="http://127.0.0.1:5000/input-absen/{{rapat.id}}" disabled />
+                          <span class="input-group-text" id="basic-addon2"><i class="bi-check2-circle"></i></span>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-keluar" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-dark btn-copy">Copy</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Akhir Modal Link-->
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             {% if rapats.page != 1 %}
@@ -94,12 +193,38 @@
           </ul>
         </nav>
       </div>
+      {% else %}
+      <div class="row d-flex justify-content-center">
+        <img src="{{ url_for('static', filename='img/nodata.svg' ) }}" class="img-fluid" alt="" />
+      </div>
+      {% endif %}
     </div>
   </div>
   <script>
     function showAlert() {
       swal("Tidak ada peserta rapat", {
         button: false,
+      });
+    }
+  </script>
+  <script>
+    const copyButton = document.querySelectorAll(".btn-copy");
+    const copyText = document.querySelectorAll(".link");
+    const checklist = document.querySelectorAll(".checklist span i");
+    const closeButton = document.querySelectorAll(".btn-keluar");
+
+    for (let i = 0; i < copyButton.length; i++) {
+      copyButton[i].addEventListener("click", (e) => {
+        e.preventDefault();
+        copyText[i].select();
+        copyText[i].setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText[i].value);
+        checklist[i].style.visibility = "visible";
+      });
+
+      closeButton[i].addEventListener("click", (e) => {
+        e.preventDefault();
+        checklist[i].style.visibility = "hidden";
       });
     }
   </script>

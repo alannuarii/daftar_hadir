@@ -1,3 +1,4 @@
+# from crypt import methods
 from sqlalchemy import desc
 from app import app
 from app import db
@@ -128,9 +129,21 @@ def input_absen(id):
     return render_template('pages/input-absen.html', title='Input Daftar Hadir', rapat=rapat)
 
 
-@app.route('/daftar-hadir/<int:page_num>')
+@app.route('/daftar-hadir/<int:page_num>', methods=['GET','POST'])
 def daftar_hadir(page_num):
-    rapat_all = Agenda.query.order_by(desc('tanggal')).paginate(per_page=10, page=page_num, error_out=True)
+    if request.method == 'POST':
+        if 'cariagenda' in request.form and request.form['selected'] == 'tanggal':
+            cariagenda = request.form['cariagenda']
+            search = '%{}%'.format(cariagenda)
+            rapat_all = Agenda.query.filter(Agenda.tanggal.like(search)).paginate(per_page=10, page=page_num, error_out=True)
+            return render_template('pages/daftar-hadir.html', title='Daftar Hadir Rapat', rapats=rapat_all, search=cariagenda, tanggal_check='checked')
+        elif 'cariagenda' in request.form and request.form['selected'] == 'agenda':
+            cariagenda = request.form['cariagenda']
+            search = '%{}%'.format(cariagenda)
+            rapat_all = Agenda.query.filter(Agenda.agenda.like(search)).paginate(per_page=10, page=page_num, error_out=True)
+            return render_template('pages/daftar-hadir.html', title='Daftar Hadir Rapat', rapats=rapat_all, search=cariagenda, agenda_check='checked')
+    else:
+        rapat_all = Agenda.query.order_by(desc('tanggal_real')).paginate(per_page=10, page=page_num, error_out=True)
 
     return render_template('pages/daftar-hadir.html', title='Daftar Hadir Rapat', rapats=rapat_all)
 
@@ -158,11 +171,63 @@ def cetak_absen(agenda_id):
     return render_template('pages/cetak-absen.html', title='Cetak Daftar Hadir', guests=guest)
 
 
-@app.route('/pengaturan/<id>/<int:page_num>')
+@app.route('/pengaturan/<id>/<int:page_num>', methods=['GET','POST'])
+@login_required
 def pengaturan(id, page_num):
-    rapats = Agenda.query.filter_by(user_id=id).paginate(per_page=10, page=page_num, error_out=True)
+    if current_user.level == 1:
+        rapats = Agenda.query.order_by(desc('tanggal_real')).paginate(per_page=10, page=page_num, error_out=True)
+        return render_template('pages/pengaturan.html', title='Pengaturan', rapats=rapats)
+    elif current_user.level == 2:
+        rapats = Agenda.query.filter_by(user_id=id).order_by(desc('tanggal_real')).paginate(per_page=10, page=page_num, error_out=True) 
+        return render_template('pages/pengaturan.html', title='Pengaturan', rapats=rapats)
 
-    return render_template('pages/pengaturan.html', title='Pengaturan', rapats=rapats)
+    if request.method == 'POST':
+        if 'update' in request.form:
+            edit = Agenda.query.filter_by(id=request.form['id']).first()
+            edit.tanggal = tanggal(request.form['tanggal'])
+            edit.tanggal_real = request.form['tanggal']
+            edit.waktu = request.form['waktu']
+            edit.tempat = request.form['tempat']
+            edit.link = request.form['link']
+            edit.agenda = request.form['agenda']
+            db.session.add(edit)
+            db.session.commit()
+            return redirect(url_for('pengaturan', id=id, page_num=1))
+        
+        elif 'create' in request.form:
+            str_tanggal = request.form['tanggal']
+            waktu = request.form['waktu']
+            tempat = request.form['tempat']
+            link = request.form['link']
+            agenda = request.form['agenda']
+            user_id = request.form['user_id']
+            rapat = Agenda(tanggal=tanggal(str_tanggal), tanggal_real=str_tanggal, waktu=waktu, tempat=tempat, link=link, agenda=agenda, user_id=user_id)
+            db.session.add(rapat)
+            db.session.commit()
+            return redirect(url_for('pengaturan', id=id, page_num=1))
+
+        elif 'register' in request.form:
+            name = request.form['name']
+            email = request.form['email']
+            password = request.form['password']
+            level = request.form['level']
+            register = User(name=name, email=email, level=level)
+            register.setPassword(password)
+            db.session.add(register)
+            db.session.commit()
+            return redirect(url_for('pengaturan', id=id, page_num=1))
+
+    # return render_template('pages/pengaturan.html', title='Pengaturan', rapats=rapats)
+
+
+@app.route('/hapus-agenda/<id>')
+@login_required
+def hapus_agenda(id):
+    hapus = Agenda.query.filter_by(id=id).first()
+    db.session.delete(hapus)
+    db.session.commit()
+
+    return redirect(url_for('pengaturan', id=current_user.id, page_num=1))
 
 
 @app.route('/absen-pdf/<agenda_id>')

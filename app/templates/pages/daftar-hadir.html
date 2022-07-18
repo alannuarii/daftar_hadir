@@ -6,34 +6,64 @@
     <div class="col-12">
       <div class="card text-center rounded-4">
         <h3 class="fw-bolder">DAFTAR HADIR RAPAT</h3>
-        <table class="table table-bordered text-center border border-5">
-          <thead class="bg-dark">
-            <tr class="text-light">
-              <th scope="col">No</th>
-              <th scope="col">Hari/Tanggal</th>
-              <th scope="col">Lokasi</th>
-              <th scope="col">Agenda</th>
-              <th scope="col">Peserta</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for rapat in rapats.items %}
-            <tr>
-              <td>{{loop.index}}</td>
-              <td>{{rapat.tanggal}}</td>
-              <td>{{rapat.tempat}}</td>
-              <td class="text-start">{{rapat.agenda}}</td>
-              <td>
-                {% if rapat.absens|length == 0 %}
-                <button class="btn" onclick="showAlert()"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></button>
-                {% else %}
-                <a class="btn" href="{{ url_for('peserta_rapat', agenda_id=rapat.id, page_num=1 ) }}"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></a>
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <form action="" method="post">
+          <div class="d-flex justify-content-end align-items-center mt-3 mb-2">
+            <div class="me-3">Pencarian berdasarkan</div>
+            <div class="form-check me-3">
+              <input class="form-check-input" type="radio" name="selected" id="flexRadioDefault1" value="tanggal" {{tanggal_check}} />
+              <label class="form-check-label" for="flexRadioDefault1"> Tanggal </label>
+            </div>
+            <div class="form-check me-3">
+              <input class="form-check-input" type="radio" name="selected" id="flexRadioDefault2" value="agenda" {{agenda_check}} />
+              <label class="form-check-label" for="flexRadioDefault2"> Agenda </label>
+            </div>
+            <div class="input-group w-25 me-1">
+              <input type="text" class="form-control" placeholder="Masukkan kata pencarian" name="cariagenda" value="{{search}}" required />
+              <input class="btn btn-secondary px-4" type="submit" id="button-addon2" value="Cari" />
+            </div>
+            <div>
+              <a href="{{ url_for('daftar_hadir', page_num=1 ) }}" class="btn btn-secondary"><i class="bi-arrow-clockwise" data-bs-toggle="tooltip" data-bs-placement="top" title="Reload"></i></a>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive">
+          <table class="table table-bordered text-center border border-5">
+            <thead class="bg-dark">
+              <tr class="text-light">
+                <th scope="col">No</th>
+                <th scope="col">Hari/Tanggal</th>
+                <th scope="col">Lokasi</th>
+                <th scope="col">Agenda</th>
+                <th scope="col">Peserta</th>
+              </tr>
+            </thead>
+            {% if rapats.items %}
+            <tbody>
+              {% for rapat in rapats.items %}
+              <tr class="align-middle">
+                <td>{{((rapats.page-1)*10)+loop.index}}</td>
+                <td>{{rapat.tanggal}}</td>
+                <td>{{rapat.tempat}}</td>
+                <td class="text-start">{{rapat.agenda}}</td>
+                <td>
+                  {% if rapat.absens|length == 0 %}
+                  <button class="btn btn-peserta" onclick="showAlert()"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></button>
+                  {% else %}
+                  <a class="btn btn-peserta" href="{{ url_for('peserta_rapat', agenda_id=rapat.id, page_num=1 ) }}"><i class="bi-people"></i><span class="badge text-bg-secondary ms-2">{{rapat.absens|length}}</span></a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% else %}
+            <tbody>
+              <tr>
+                <td colspan="5">Tidak Ditemukan</td>
+              </tr>
+            </tbody>
+            {% endif %}
+          </table>
+        </div>
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             {% if rapats.page != 1 %}

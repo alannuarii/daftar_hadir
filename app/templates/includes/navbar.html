@@ -1,18 +1,19 @@
 <header class="fixed-top">
   <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container">
-      <a href="/" class="navbar-brand d-flex align-items-center">
+      <a href="/" class="navbar-brand d-flex align-items-center me-auto">
         <strong>DAFTAR HADIR ONLINE</strong>
       </a>
-      {% if current_user.name %}
+      <a href="/" class="btn"><i class="bi-house text-light" data-bs-toggle="tooltip" data-bs-placement="left" title="Home"></i></a>
+      {% if request.path == '/' %} {% if current_user.name %}
       <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#needlogin" aria-controls="offcanvasRight">
-        <span class="navbar-toggler-icon"></span>
+        <i class="bi-list text-light" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"></i>
       </button>
       {% else %}
       <button class="btn" data-bs-toggle="offcanvas" data-bs-target="#notlogin" aria-controls="offcanvasRight">
-        <span class="navbar-toggler-icon"></span>
+        <i class="bi-list text-light" data-bs-toggle="tooltip" data-bs-placement="right" title="Menu"></i>
       </button>
-      {% endif %}
+      {% endif %} {% endif %}
     </div>
   </div>
 </header>
@@ -86,7 +87,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-dark">Buat</button>
+          <button type="submit" class="btn btn-dark" name="create">Buat</button>
         </div>
       </form>
     </div>
